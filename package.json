@@ -7,9 +7,12 @@
     "types": "dist/index.d.ts",
     "license": "MIT",
     "scripts": {
+        "precommit": "bash linter.sh",
+        "prepush": "bash linter.sh",
         "ts-lint": "tslint -p tsconfig.json"
     },
     "devDependencies": {
+        "husky": "^0.14.3",
         "tslint": "^5.8.0",
         "typescript": "^2.4.2"
     }
