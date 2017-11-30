@@ -6,7 +6,11 @@
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "license": "MIT",
+    "scripts": {
+        "ts-lint": "tslint -p tsconfig.json"
+    },
     "devDependencies": {
+        "tslint": "^5.8.0",
         "typescript": "^2.4.2"
     }
 }
