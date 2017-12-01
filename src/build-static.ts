@@ -63,7 +63,7 @@ export namespace Statisfy {
                 let success = false;
                 let tryCounter = 0;
 
-                while (!success && tryCounter <= 3) {
+                while (!success && tryCounter++ <= 3) {
                     try {
                         const page = await browser.newPage();
                         await page.goto(fullRoute);
@@ -73,7 +73,7 @@ export namespace Statisfy {
                     } catch (e) {
                         if (config.verbose !== false) {
                             console.warn(`Could not evaluate ${fullRoute} in`
-                                + ` try ${tryCounter++}.`);
+                                + ` try ${tryCounter}.`);
                             console.warn(`Error: ${e}`);
                         }
                     }
