@@ -30,6 +30,12 @@ export namespace Statisfy {
          * @default true
          */
         sandBox?: boolean;
+
+        /**
+         * Enable verbose mode.
+         * @default true
+         */
+        verbose?: boolean;
     }
 
     export function generateStaticHtml(config: StatisfyConfigInterface) {
@@ -48,7 +54,10 @@ export namespace Statisfy {
 
             for (const route of config.routes) {
                 const fullRoute = config.host + route;
-                console.log(`Statisfying ${fullRoute}`);
+
+                if (config.verbose !== false) {
+                    console.log(`Statisfying ${fullRoute}`);
+                }
 
                 let html: any;
                 let success = false;
@@ -62,9 +71,11 @@ export namespace Statisfy {
                         await page.close();
                         success = true;
                     } catch (e) {
-                        console.warn(`Could not evaluate ${fullRoute} in`
-                            + ` try ${tryCounter++}.`);
-                        console.warn(`Error: ${e}`);
+                        if (config.verbose !== false) {
+                            console.warn(`Could not evaluate ${fullRoute} in`
+                                + ` try ${tryCounter++}.`);
+                            console.warn(`Error: ${e}`);
+                        }
                     }
                 }
 
@@ -88,7 +99,7 @@ export namespace Statisfy {
                     editedDom,
                     err => {
                         if (err) {
-                            console.log(err);
+                            console.error(err);
                         }
                     },
                 );
