@@ -10,7 +10,6 @@ export namespace Statisfy {
 
         /**
          * The directory to place the generated files in.
-         * @default
          */
         directory?: string;
 

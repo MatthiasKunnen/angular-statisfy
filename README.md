@@ -3,6 +3,50 @@ This library generates static HTML from an existing Angular application.
 The generated HTML can be used to serve spiders and crawlers in order to
 improve SEO.
 
+## Install
+Install the library using `npm install angular-statisfy`.
+
+## Usage
+
+The default usage of statisfy can be found in the code below.
+
+```typescript
+Statisfy.generateStaticHtml({
+    host: 'https://example.com/',
+    directory: 'static',
+    routes: [
+        'home',
+        'blog',
+        'blog/a-new-way-of-seo',
+    ],
+});
+```
+
+Statisfy has some settings that can be used to tweak its behavior.
+
+ - directory: string  
+   The directory to place the generated files in.
+
+ - host: string  
+   An absolute URL pointing to the host to statisfy.
+
+ - routes: string[]  
+   An array of routes to statisfy.
+
+ - sandBox?: boolean  
+   Use this to disable the sandbox setting of puppeteer. This can be useful
+   when encountering errors in a docker environment.  
+   **@default true**
+
+ - tries?: number  
+   The amount of times to try statisfying a page before continuing to the
+   next.  
+   **@default 3**
+
+ - verbose?: boolean  
+   Enables verbose mode.  
+   **@default true**
+
 ## Support
 Statisfy is tested on Angular 4 and 5 but should work on other versions.
 
