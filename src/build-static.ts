@@ -32,6 +32,12 @@ export namespace Statisfy {
         sandBox?: boolean;
 
         /**
+         * The amount of times to try statisfying a page before continuing to the next.
+         * @default 3
+         */
+        tries?: number;
+
+        /**
          * Enable verbose mode.
          * @default true
          */
@@ -49,6 +55,8 @@ export namespace Statisfy {
             ]);
         }
 
+        const tries = config.tries || 3;
+
         (async () => {
             const browser = await puppeteer.launch({args: puppeteerArgs});
 
@@ -63,7 +71,7 @@ export namespace Statisfy {
                 let success = false;
                 let tryCounter = 0;
 
-                while (!success && tryCounter++ <= 3) {
+                while (!success && tryCounter++ <= tries) {
                     try {
                         const page = await browser.newPage();
                         await page.goto(fullRoute);
