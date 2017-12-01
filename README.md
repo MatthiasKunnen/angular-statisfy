@@ -1,4 +1,7 @@
 # Angular statisfy
+[![npm version](https://img.shields.io/npm/v/angular-statisfy.svg?style=for-the-badge)](https://www.npmjs.com/package/angular-statisfy)
+
+
 This library generates static HTML from an existing Angular application.
 The generated HTML can be used to serve spiders and crawlers in order to
 improve SEO.
