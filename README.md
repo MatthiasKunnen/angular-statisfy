@@ -14,6 +14,8 @@ Install the library using `npm install angular-statisfy`.
 The default usage of statisfy can be found in the code below.
 
 ```typescript
+import { Statisfy } from 'angular-statisfy';
+
 Statisfy.generateStaticHtml({
     host: 'https://example.com/',
     directory: 'static',
