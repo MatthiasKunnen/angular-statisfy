@@ -1,87 +1,34 @@
 # Angular statisfy
 [![npm version](https://img.shields.io/npm/v/angular-statisfy.svg?style=for-the-badge)](https://www.npmjs.com/package/angular-statisfy)
+[![Build Status](https://img.shields.io/github/workflow/status/MatthiasKunnen/angular-statisfy/Main?label=Build&logo=github&style=for-the-badge)
+](https://github.com/MatthiasKunnen/angular-statisfy/actions)
+[![License](https://img.shields.io/npm/l/angular-statisfy?style=for-the-badge&color=green)
+](https://github.com/MatthiasKunnen/angular-statisfy/blob/master/LICENSE)
 
+This library renders your application, strips the script tags, and returns the static HTML for a given URL.
+The generated HTML can be used to serve spiders and crawlers in order to improve SEO.
 
-This library generates static HTML from an existing Angular application.
-The generated HTML can be used to serve spiders and crawlers in order to
-improve SEO.
+Originally made for Angular but works for any single page applications or website.
 
 ## Install
-Install the library using `npm install angular-statisfy`.
+Install the library using `yarn add angular-statisfy`.
 
 ## Usage
 
 The default usage of statisfy can be found in the code below.
 
 ```typescript
-import { Statisfy } from 'angular-statisfy';
+import {launch} from 'puppeteer';
 
-Statisfy.generateStaticHtml({
-    host: 'https://example.com/',
-    directory: 'static',
-    routes: [
-        'home',
-        'blog',
-        'blog/a-new-way-of-seo',
-    ],
-});
-```
+import {generateStaticHtml} from './generate-static';
 
-Statisfy has some settings that can be used to tweak its behavior.
+(async () => {
+    const browser = await launch({
+        args: ['--no-sandbox'],
+    });
 
- - directory: string  
-   The directory to place the generated files in.
+    const html = await generateStaticHtml('https://bookingworldspeakers.com', browser);
 
- - host: string  
-   An absolute URL pointing to the host to statisfy.
-
- - routes: string[]  
-   An array of routes to statisfy.
-
- - sandBox?: boolean  
-   Use this to disable the sandbox setting of puppeteer. This can be useful
-   when encountering errors in a docker environment.  
-   **@default true**
-
- - tries?: number  
-   The amount of times to try statisfying a page before continuing to the
-   next.  
-   **@default 3**
-
- - verbose?: boolean  
-   Enables verbose mode.  
-   **@default true**
-
-## Support
-Statisfy is tested on Angular 4 and 5 but should work on other versions.
-
-## Serve static files to spiders
-
-### Apache
-Using Apache, you can serve the static files to spiders using the following
-partial `.htaccess` file.
-
-```apacheconfig
-RewriteEngine On
-
-# Remove trailing /
-RewriteRule ^(.*)/$ /$1 [L,R=301]
-
-# Rewrite spiders to static html
-RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|msnbot|yahoo|Baidu|aolbuild|facebookexternalhit|iaskspider|DuckDuckBot|Applebot|Almaden|iarchive|archive.org_bot) [NC]
-RewriteCond %{DOCUMENT_ROOT}/static%{REQUEST_URI}.html -f
-RewriteRule ^(.*)$ /static/$1.html [L]
-
-# Rewrite spiders to static index.html
-RewriteCond %{HTTP_USER_AGENT} (googlebot|bingbot|msnbot|yahoo|Baidu|aolbuild|facebookexternalhit|iaskspider|DuckDuckBot|Applebot|Almaden|iarchive|archive.org_bot) [NC]
-RewriteCond %{REQUEST_URI} "^/$"
-RewriteRule ^ /static/index.html [L]
-
-# If an existing asset or directory is requested, serve it
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
-RewriteRule ^ - [L]
-
-# If the requested resource doesn't exist, use the Angular app entry point
-RewriteRule ^ /index.html
+    await browser.close();
+})().catch(console.error);
 ```

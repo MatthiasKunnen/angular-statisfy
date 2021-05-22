@@ -1,1 +1,1 @@
-export {Statisfy, StatisfyConfigInterface} from './build-static';
+export {generateStaticHtml} from './generate-static';
