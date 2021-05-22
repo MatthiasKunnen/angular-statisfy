@@ -1,7 +1,13 @@
 {
     "name": "angular-statisfy",
     "version": "1.2.1",
-    "description": "A library to generate static HTML for an Angular applciation",
+    "description": "Prerender an Angular application into static HTML for crawlers",
+    "keywords": [
+        "Prerender",
+        "SEO",
+        "Angular",
+        "Static HTML"
+    ],
     "author": "Matthias Kunnen",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
