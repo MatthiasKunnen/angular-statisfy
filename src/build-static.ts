@@ -1,50 +1,50 @@
-import * as cheerio from 'cheerio';
 import * as fs from 'fs';
-import * as mkdirp from 'mkdirp';
 import * as path from 'path';
+
+import * as cheerio from 'cheerio';
+import * as mkdirp from 'mkdirp';
 import * as puppeteer from 'puppeteer';
 
-export namespace Statisfy {
+export interface StatisfyConfigInterface {
 
-    export interface StatisfyConfigInterface {
+    /**
+     * The directory to place the generated files in.
+     */
+    directory?: string;
 
-        /**
-         * The directory to place the generated files in.
-         */
-        directory?: string;
+    /**
+     * An absolute URL pointing to the host to statisfy.
+     */
+    host: string;
 
-        /**
-         * An absolute URL pointing to the host to statisfy.
-         */
-        host: string;
+    /**
+     * An array of routes to statisfy.
+     */
+    routes: Array<string>;
 
-        /**
-         * An array of routes to statisfy.
-         */
-        routes: string[];
+    /**
+     * Use this to disable the sandbox setting of puppeteer. This can be useful when
+     * encountering errors in a docker environment.
+     * @default true
+     */
+    sandBox?: boolean;
 
-        /**
-         * Use this to disable the sandbox setting of puppeteer. This can be useful when
-         * encountering errors in a docker environment.
-         * @default true
-         */
-        sandBox?: boolean;
+    /**
+     * The amount of times to try statisfying a page before continuing to the next.
+     * @default 3
+     */
+    tries?: number;
 
-        /**
-         * The amount of times to try statisfying a page before continuing to the next.
-         * @default 3
-         */
-        tries?: number;
+    /**
+     * Enable verbose mode.
+     * @default true
+     */
+    verbose?: boolean;
+}
 
-        /**
-         * Enable verbose mode.
-         * @default true
-         */
-        verbose?: boolean;
-    }
+export class Statisfy {
 
-    export function generateStaticHtml(config: StatisfyConfigInterface) {
-
+    static generateStaticHtml(config: StatisfyConfigInterface) {
         const puppeteerArgs: Array<string> = [];
 
         if (config.sandBox === false) {
@@ -54,7 +54,7 @@ export namespace Statisfy {
             ]);
         }
 
-        const tries = config.tries || 3;
+        const tries = config.tries ?? 3;
 
         (async () => {
             const browser = await puppeteer.launch({args: puppeteerArgs});
@@ -101,11 +101,11 @@ export namespace Statisfy {
                 dom('base').attr('href', config.host);
 
                 const editedDom = dom.html();
-                writeFile(
-                    `${config.directory}/${route ? route : 'index'}.html`,
+                this.writeFile(
+                    `${config.directory}/${route === '' ? 'index' : route}.html`,
                     editedDom,
                     err => {
-                        if (err) {
+                        if (err !== null) {
                             console.error(err);
                         }
                     },
@@ -113,13 +113,18 @@ export namespace Statisfy {
             }
 
             await browser.close();
-        })();
+        })().catch(console.error);
     }
 
-    function writeFile(filePath: string, contents: any, cb: (err) => void) {
+    private static writeFile(
+        filePath: string,
+        contents: any,
+        cb: (err: Error | null) => void,
+    ) {
         mkdirp(path.dirname(filePath), err => {
-            if (err) {
-                return cb(err);
+            if ((err as any) != null) {
+                cb(err);
+                return;
             }
 
             fs.writeFile(filePath, contents, cb);

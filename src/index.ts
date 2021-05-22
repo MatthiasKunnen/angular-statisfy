@@ -1,1 +1,1 @@
-export { Statisfy } from './build-static';
+export {Statisfy, StatisfyConfigInterface} from './build-static';

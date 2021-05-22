@@ -1,5 +1,6 @@
 # compiled output
 /dist
+/lib
 /tmp
 /out-tsc
 
@@ -41,3 +42,5 @@ yarn-error.log
 Thumbs.db
 
 **/*.min.*
+*.local.*
+/local
