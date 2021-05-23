@@ -1,6 +1,6 @@
 {
     "name": "angular-statisfy",
-    "version": "1.2.1",
+    "version": "2.0.0",
     "description": "Prerender an Angular application into static HTML for crawlers",
     "keywords": [
         "Prerender",
